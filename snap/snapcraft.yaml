@@ -170,7 +170,7 @@ parts:
       dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
     build-packages:
       - dpkg
-      - svn
+      - subversion
       - wget
     stage-packages:
       - libasound2:armhf
