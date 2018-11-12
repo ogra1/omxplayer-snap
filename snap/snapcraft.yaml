@@ -16,6 +16,12 @@ architectures:
 apps:
   omxplayer:
     command: xwayland-kiosk-launch omxplayer.bin -b -o hdmi
+    environment:
+      XWAYLAND_FULLSCREEN_WINDOW_HINT: title="omxplayer-pi.omxplayer"
+      FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
+      FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
+      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:/var/lib/snapd/lib/gl
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$LIBGL_DRIVERS_PATH:/var/lib/snapd/lib/gl:$LD_LIBRARY_PATH
     plugs:
       - network
       - network-bind
@@ -173,6 +179,8 @@ parts:
       - subversion
       - wget
     stage-packages:
+      - fontconfig
+      - fonts-dejavu-core
       - libasound2:armhf
       - libx11-6:armhf
       - libxext6:armhf
