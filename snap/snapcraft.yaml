@@ -8,7 +8,7 @@ description: |
 
   OMXPlayer can not be used with the KMS driver on Ubuntu Core, make sure
   to comment "dtoverlay=vc4-kms-v3d" in /boot/uboot/config.txt (note that
-  thi in turn dissables support for mir-kiosk)
+  this in turn dissables support for mir-kiosk)
 
 grade: stable
 confinement: strict
