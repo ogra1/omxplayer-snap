@@ -6,39 +6,29 @@ description: |
   It was developed as a testbed for the XBMC Raspberry PI implementation
   and is quite handy to use standalone.
 
+  OMXPlayer can not be used with the KMS driver on Ubuntu Core, make sure
+  to comment "dtoverlay=vc4-kms-v3d" in /boot/uboot/config.txt (note that
+  thi in turn dissables support for mir-kiosk)
+
 grade: stable
 confinement: strict
 
 architectures:
-  - build-on: armhf
+  - build-on: amd64
     run-on: armhf
 
 apps:
-  omxplayer:
-    command: xwayland-kiosk-launch omxplayer.bin -b -o hdmi
-    environment:
-      XWAYLAND_FULLSCREEN_WINDOW_HINT: title="omxplayer-pi.omxplayer"
-      FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
-      FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
-      LIBGL_DRIVERS_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:/var/lib/snapd/lib/gl
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$LIBGL_DRIVERS_PATH:/var/lib/snapd/lib/gl:$LD_LIBRARY_PATH
+  omxplayer-pi:
+    command: omxplayer.bin
     plugs:
       - network
       - network-bind
       - opengl
-      - pulseaudio
-      - wayland
-      - x11-plug
-    slots: [ x11 ]
-
-plugs:
-  x11-plug:
-    interface: x11
+      - home
 
 parts:
   player:
     plugin: nil
-    after: [ xwayland-kiosk-helper ]
     override-build: |
       # player
       SERVER="https://omxplayer.sconde.net"
@@ -179,8 +169,6 @@ parts:
       - subversion
       - wget
     stage-packages:
-      - fontconfig
-      - fonts-dejavu-core
       - libasound2:armhf
       - libx11-6:armhf
       - libxext6:armhf
