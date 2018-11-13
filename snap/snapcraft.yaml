@@ -33,8 +33,14 @@ apps:
       - opengl
 
 parts:
+  enable-armhf:
+    plugin: nil
+    override-build: |
+      dpkg --add-architecture armhf
+      apt update
   player:
     plugin: nil
+    after: [ enable-armhf ]
     override-build: |
       # player
       SERVER="https://omxplayer.sconde.net"
