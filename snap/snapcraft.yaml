@@ -177,7 +177,7 @@ parts:
       - subversion
       - wget
     stage-packages:
-      - to armhf:
+      - on amd64 to armhf:
         - libasound2:armhf
         - libx11-6:armhf
         - libxext6:armhf
