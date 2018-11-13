@@ -177,12 +177,11 @@ parts:
       - subversion
       - wget
     stage-packages:
-      - on amd64 to armhf:
-        - "libasound2:armhf"
-        - "libx11-6:armhf"
-        - "libxext6:armhf"
-        - "libdrm2:armhf"
-        - "libxfixes3:armhf"
-        - "libogg0:armhf"
-        - "libxml2:armhf"
-        - "libgomp1:armhf"
+      - libasound2:armhf
+      - libx11-6:armhf
+      - libxext6:armhf
+      - libdrm2:armhf
+      - libxfixes3:armhf
+      - libogg0:armhf
+      - libxml2:armhf
+      - libgomp1:armhf
