@@ -26,6 +26,11 @@ apps:
       - network-bind
       - opengl
       - home
+  set-permissions:
+    command: set-permissions
+    daemon: oneshot
+    plugs:
+      - opengl
 
 parts:
   player:
@@ -165,6 +170,8 @@ parts:
       DEB="http://ftp.debian.org/debian/pool/main/n/nettle/libhogweed2_2.7.1-5+deb8u2_armhf.deb"
       wget $DEB
       dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/bin/
     build-packages:
       - dpkg
       - subversion

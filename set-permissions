@@ -1,0 +1,7 @@
+#! /bin/sh
+
+CURPERM="$(stat --printf=%a /dev/vchiq)"
+
+if [ "$CURPERM" != "666" ]; then
+    chmod 0666 /dev/vchiq
+fi
