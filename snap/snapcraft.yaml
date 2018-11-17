@@ -192,4 +192,5 @@ parts:
       - libxfixes3:armhf
       - libogg0:armhf
       - libxml2:armhf
+      - fonts-freefont-ttf:armhf
       - libgomp1:armhf
