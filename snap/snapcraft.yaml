@@ -15,7 +15,7 @@ grade: stable
 confinement: strict
 
 architectures:
-  - build-on: amd64
+  - build-on: armhf
     run-on: armhf
 
 apps:
@@ -35,162 +35,77 @@ apps:
       - opengl
 
 parts:
-  enable-armhf:
+  vc4-libs:
     plugin: nil
     override-build: |
-      dpkg --add-architecture armhf
-      apt update
-  player:
-    plugin: nil
-    after: [ enable-armhf ]
-    override-build: |
-      # player
-      SERVER="https://omxplayer.sconde.net"
-      DEB="$(wget -q -O- $SERVER/|grep -A5 Latest|grep .deb|sed 's/^.*href=\"//;s/\".*$//')"
-      wget $SERVER/$DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # hardware libs
       svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/lib \
-                    $SNAPCRAFT_PART_INSTALL/usr/lib/
-      # debian ffmpeg deps
-      DPKGS="libavutil55_3.2.10-1~deb9u1~bpo8+1_armhf.deb libavcodec57_3.2.10-1~deb9u1~bpo8+1_armhf.deb libavformat57_3.2.10-1~deb9u1~bpo8+1_armhf.deb libswscale4_3.2.10-1~deb9u1~bpo8+1_armhf.deb libswresample2_3.2.10-1~deb9u1~bpo8+1_armhf.deb"
-      for dpkg in $DPKGS; do
-        URL="http://ftp.debian.org/debian/pool/main/f/ffmpeg/$dpkg"
-        wget $URL
-        dpkg -x $(basename $URL) $SNAPCRAFT_PART_INSTALL
-      done
-      # libvdpau
-      DEB="http://ftp.debian.org/debian/pool/main/libv/libvdpau/libvdpau1_1.1.1-1~bpo8+1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # debian libav1 deps
-      DPKGS="libva-drm1_1.7.3-2~bpo8+1_armhf.deb libva1_1.7.3-2~bpo8+1_armhf.deb libva-x11-1_1.7.3-2~bpo8+1_armhf.deb"
-      for dpkg in $DPKGS; do
-        URL="http://ftp.debian.org/debian/pool/main/libv/libva/$dpkg"
-        wget $URL
-        dpkg -x $(basename $URL) $SNAPCRAFT_PART_INSTALL
-      done
-      # libzvbi
-      DEB="http://ftp.debian.org/debian/pool/main/z/zvbi/libzvbi0_0.2.35-3_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libxvidcore
-      DEB="http://ftp.debian.org/debian/pool/main/x/xvidcore/libxvidcore4_1.3.3-1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libx265
-      DEB="http://ftp.debian.org/debian/pool/main/x/x265/libx265-87_2.0-4~bpo8+1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libx264
-      DEB="http://ftp.debian.org/debian/pool/main/x/x264/libx264-142_0.142.2431+gita5831aa-1+b2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libwebp5
-      DEB="http://ftp.debian.org/debian/pool/main/libw/libwebp/libwebp5_0.4.1-1.2+b2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libwavpack
-      DEB="http://ftp.debian.org/debian/pool/main/w/wavpack/libwavpack1_4.70.0-1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libvpx1
-      DEB="http://ftp.debian.org/debian/pool/main/libv/libvpx/libvpx1_1.3.0-3+deb8u1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libvorbisenc2
-      DEB="http://ftp.debian.org/debian/pool/main/libv/libvorbis/libvorbisenc2_1.3.4-2+deb8u1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libvorbis0a
-      DEB="http://ftp.debian.org/debian/pool/main/libv/libvorbis/libvorbis0a_1.3.4-2+deb8u1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libtwolame0
-      DEB="http://ftp.debian.org/debian/pool/main/t/twolame/libtwolame0_0.3.13-1.1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libtheoraenc
-      DEB="http://ftp.debian.org/debian/pool/main/libt/libtheora/libtheora0_1.1.1+dfsg.1-6_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libspeex1
-      DEB="http://ftp.debian.org/debian/pool/main/s/speex/libspeex1_1.2~rc1.2-1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libsnappy1
-      DEB="http://ftp.debian.org/debian/pool/main/s/snappy/libsnappy1_1.1.2-3_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libshine3
-      DEB="http://ftp.debian.org/debian/pool/main/s/shine/libshine3_3.1.0-2.1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libopus0
-      DEB="http://ftp.debian.org/debian/pool/main/o/opus/libopus0_1.1-2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libopenjp2
-      DEB="http://security.debian.org/debian-security/pool/updates/main/o/openjpeg2/libopenjp2-7_2.1.0-2+deb8u4_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libmp3lame
-      DEB="http://ftp.debian.org/debian/pool/main/l/lame/libmp3lame0_3.99.5+repack1-7+deb8u2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libgsm1
-      DEB="http://ftp.debian.org/debian/pool/main/libg/libgsm/libgsm1_1.0.13-4_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libssh-gcrypt-4
-      DEB="http://security.debian.org/debian-security/pool/updates/main/libs/libssh/libssh-gcrypt-4_0.6.3-4+deb8u3_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libmodplug1
-      DEB="http://ftp.debian.org/debian/pool/main/libm/libmodplug/libmodplug1_0.8.8.4-4.1+b1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libgme0
-      DEB="http://ftp.debian.org/debian/pool/main/g/game-music-emu/libgme0_0.5.5-2+deb8u1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libbluray1
-      DEB="http://ftp.debian.org/debian/pool/main/libb/libbluray/libbluray1_0.6.2-1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libgnutls-deb0-28
-      DEB="http://security.debian.org/debian-security/pool/updates/main/g/gnutls28/libgnutls-deb0-28_3.3.30-0+deb8u1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libchromaprint1
-      DEB="http://ftp.debian.org/debian/pool/main/c/chromaprint/libchromaprint1_1.3.2-2~bpo8+1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libsoxr0
-      DEB="http://ftp.debian.org/debian/pool/main/libs/libsoxr/libsoxr0_0.1.1-1_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libnettle4
-      DEB="http://ftp.debian.org/debian/pool/main/n/nettle/libnettle4_2.7.1-5+deb8u2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      # libhogweed
-      DEB="http://ftp.debian.org/debian/pool/main/n/nettle/libhogweed2_2.7.1-5+deb8u2_armhf.deb"
-      wget $DEB
-      dpkg -x $(basename $DEB) $SNAPCRAFT_PART_INSTALL
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/bin/
+                          $SNAPCRAFT_PART_INSTALL/usr/lib
     build-packages:
-      - dpkg
       - subversion
-      - wget
+  player:
+    plugin: make
+    source: https://github.com/popcornmix/omxplayer.git
+    source-depth: 1
+    override-build: |
+      svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/include .
+      svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/lib vclibs
+      mv vclibs/* .
+      git apply ../../../patch
+      make DESTDIR=$SNAPCRAFT_PART_INSTALL dist
+      cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/usr/bin
+    after: [ vc4-libs ]
+    build-packages:
+      - libasound2-dev
+      - libavutil-dev
+      - libavcodec-dev
+      - libavformat-dev
+      - libva1
+      - libpcre3-dev
+      - libidn11-dev
+      - libboost-dev
+      - libfreetype6-dev
+      - libdbus-1-dev
+      - libssl-dev
+      - libssh-dev
+      - libsmbclient-dev
+      - libswresample-dev
+      - libswscale-dev
+      - subversion
     stage-packages:
-      - libasound2:armhf
-      - libx11-6:armhf
-      - libxext6:armhf
-      - libdrm2:armhf
-      - libxfixes3:armhf
-      - libogg0:armhf
-      - libxml2:armhf
-      - fonts-freefont-ttf:armhf
-      - libgomp1:armhf
+      - libasound2
+      - libavcodec-ffmpeg56
+      - libavformat-ffmpeg56
+      - libavutil-ffmpeg54
+      - libbluray1
+      - libfontconfig1
+      - libgme0
+      - libgomp1
+      - libgsm1
+      - libicu55
+      - libmodplug1
+      - libmp3lame0
+      - libogg0
+      - libopenjpeg5
+      - libopus0
+      - liborc-0.4-0
+      - librtmp1
+      - libschroedinger-1.0-0
+      - libshine3
+      - libsnappy1v5
+      - libsoxr0
+      - libspeex1
+      - libssh-gcrypt-4
+      - libswresample-ffmpeg1
+      - libtheora0
+      - libtwolame0
+      - libva1
+      - libvorbis0a
+      - libvorbisenc2
+      - libvpx3
+      - libwavpack1
+      - libwebp5
+      - libx264-148
+      - libx265-79
+      - libxml2
+      - libxvidcore4
+      - libzvbi0
