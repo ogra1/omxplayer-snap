@@ -69,6 +69,8 @@ parts:
       - libsmbclient-dev
       - subversion
     stage-packages:
+      - fonts-dejavu-core
+      - fonts-dejavu-extra
       - libasound2
       - libbluray1
       - libfontconfig1
