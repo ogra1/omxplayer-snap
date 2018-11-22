@@ -55,6 +55,7 @@ parts:
       cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/usr/bin
     after: [ vc4-libs ]
     build-packages:
+      - curl
       - libasound2-dev
       - libavutil-dev
       - libavcodec-dev
