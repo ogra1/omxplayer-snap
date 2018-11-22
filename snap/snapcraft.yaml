@@ -22,7 +22,7 @@ apps:
   omxplayer-pi:
     command: omxplayer.bin
     environment:
-      LD_LIBRARY_PATH: $SNAP/lib:$SNAP/usr/lib:$SNAP/lib/arm-linux-gnueabihf:$SNAP/usr/lib/arm-linux-gnueabihf:$LD_LIBRARY_PATH
+      LD_LIBRARY_PATH: $SNAP/usr/lib/omxplayer:$SNAP/lib:$SNAP/usr/lib:$SNAP/lib/arm-linux-gnueabihf:$SNAP/usr/lib/arm-linux-gnueabihf:$SNAP/usr/lib/arm-linux-gnueabihf/samba:$LD_LIBRARY_PATH
     plugs:
       - network
       - network-bind
@@ -51,15 +51,13 @@ parts:
       svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/lib vclibs
       mv vclibs/* .
       git apply ../../../patch
-      make DESTDIR=$SNAPCRAFT_PART_INSTALL dist
+      make ffmpeg
+      snapcraftctl build
       cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/usr/bin
     after: [ vc4-libs ]
     build-packages:
       - curl
       - libasound2-dev
-      - libavutil-dev
-      - libavcodec-dev
-      - libavformat-dev
       - libva1
       - libpcre3-dev
       - libidn11-dev
@@ -69,14 +67,9 @@ parts:
       - libssl-dev
       - libssh-dev
       - libsmbclient-dev
-      - libswresample-dev
-      - libswscale-dev
       - subversion
     stage-packages:
       - libasound2
-      - libavcodec-ffmpeg56
-      - libavformat-ffmpeg56
-      - libavutil-ffmpeg54
       - libbluray1
       - libfontconfig1
       - libgme0
@@ -96,7 +89,6 @@ parts:
       - libsoxr0
       - libspeex1
       - libssh-gcrypt-4
-      - libswresample-ffmpeg1
       - libtheora0
       - libtwolame0
       - libva1
@@ -110,3 +102,23 @@ parts:
       - libxml2
       - libxvidcore4
       - libzvbi0
+      - libasn1-8-heimdal
+      - libgssapi3-heimdal
+      - libhcrypto4-heimdal
+      - libheimbase1-heimdal
+      - libheimntlm0-heimdal
+      - libhx509-5-heimdal
+      - libkrb5-26-heimdal
+      - libldap-2.4-2
+      - libldb1
+      - libroken18-heimdal
+      - libsasl2-2
+      - libsmbclient
+      - libssh-4
+      - libtalloc2
+      - libtdb1
+      - libtevent0
+      - libwbclient0
+      - libwind0-heimdal
+      - samba-libs
+      - libdb5.3
