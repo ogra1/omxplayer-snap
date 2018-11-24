@@ -22,13 +22,12 @@ apps:
   omxplayer-pi:
     command: omxplayer.bin
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/omxplayer:$SNAP/lib:$SNAP/usr/lib:$SNAP/lib/arm-linux-gnueabihf:$SNAP/usr/lib/arm-linux-gnueabihf:$SNAP/usr/lib/arm-linux-gnueabihf/samba:$LD_LIBRARY_PATH
+      LD_LIBRARY_PATH: $SNAP/usr/lib/omxplayer:$SNAP/lib:$SNAP/usr/lib:$SNAP/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba:$LD_LIBRARY_PATH
     plugs:
       - network
       - network-bind
       - opengl
       - home
-      - removable-media
   set-permissions:
     command: set-permissions
     daemon: oneshot
@@ -37,20 +36,23 @@ apps:
 
 parts:
   vc4-libs:
+    source: https://github.com/raspberrypi/userland.git
+    source-depth: 1
     plugin: nil
     override-build: |
-      svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/lib \
-                          $SNAPCRAFT_PART_INSTALL/usr/lib
+      sed -i 's/sudo //g' ./buildme
+      ./buildme .
+      mkdir -p $SNAPCRAFT_PART_INSTALL/usr
+      cp -av ./build/raspberry/release/opt/vc/lib $SNAPCRAFT_PART_INSTALL/usr/
+      cp -av ./build/raspberry/release/opt/vc/include $SNAPCRAFT_PART_INSTALL/usr/
     build-packages:
-      - subversion
+      - cmake
+      - g++
   player:
     plugin: make
     source: https://github.com/popcornmix/omxplayer.git
     source-depth: 1
     override-build: |
-      svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/include .
-      svn checkout https://github.com/raspberrypi/firmware/trunk/hardfp/opt/vc/lib vclibs
-      mv vclibs/* .
       git apply ../../../patch
       make ffmpeg
       snapcraftctl build
