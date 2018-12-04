@@ -40,7 +40,7 @@ parts:
     source-depth: 1
     plugin: nil
     override-build: |
-      sed -i 's/sudo //g' ./buildme
+      git apply ../../../vc-libs-neon.patch
       ./buildme .
       mkdir -p $SNAPCRAFT_PART_INSTALL/usr
       cp -av ./build/raspberry/release/opt/vc/lib $SNAPCRAFT_PART_INSTALL/usr/
@@ -53,7 +53,7 @@ parts:
     source: https://github.com/popcornmix/omxplayer.git
     source-depth: 1
     override-build: |
-      git apply ../../../patch
+      git apply ../../../omxplayer-neon-and-build.patch
       make ffmpeg
       snapcraftctl build
       cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/usr/bin
