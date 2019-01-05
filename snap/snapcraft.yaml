@@ -10,6 +10,8 @@ description: |
   to comment "dtoverlay=vc4-kms-v3d" in /boot/uboot/config.txt (note that
   this in turn disables support for mir-kiosk). It is also recommended to
   set "gpu_mem=128" (or higher) when playing 1080p60 video.
+  
+  Source for this snap: https://github.com/ogra1/omxplayer-snap
 
 grade: stable
 confinement: strict
