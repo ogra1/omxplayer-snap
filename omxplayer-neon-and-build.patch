@@ -44,7 +44,7 @@ index f506ba2..2160d78 100644
  	LDFLAGS="" \
    ./configure \
 -			--extra-cflags="-mfpu=vfp -mfloat-abi=hard" \
-+			--extra-cflags="-mfpu=neon-vfpv4 -mfloat-abi=hard -funsafe-math-optimizations -ftree-vectorize \
++			--extra-cflags="-mfpu=neon-vfpv4 -mfloat-abi=hard -funsafe-math-optimizations -ftree-vectorize" \
  			--enable-shared \
  			--disable-static \
  			--arch=arm \
