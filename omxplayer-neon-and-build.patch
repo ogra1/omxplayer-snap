@@ -1,9 +1,9 @@
 diff --git a/Makefile b/Makefile
-index 5f4e414..a18a074 100644
+index 8d00dec..096169c 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -1,10 +1,10 @@
--CFLAGS=-pipe -mfloat-abi=hard -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -mno-apcs-stack-check -g -mstructure-size-boundary=32 -mno-sched-prolog
+-CFLAGS=-pipe -mfloat-abi=hard -mcpu=arm1176jzf-s -fomit-frame-pointer -mabi=aapcs-linux -mtune=arm1176jzf-s -mfpu=vfp -Wno-psabi -g
 +CFLAGS=-pipe -mfloat-abi=hard -mcpu=cortex-a8 -fomit-frame-pointer -mabi=aapcs-linux -mtune=cortex-a8 -mfpu=neon-vfpv4 -funsafe-math-optimizations -ftree-vectorize -Wno-psabi -mno-apcs-stack-check -g -mstructure-size-boundary=32 -mno-sched-prolog
  CFLAGS+=-std=c++0x -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -DTARGET_POSIX -DTARGET_LINUX -fPIC -DPIC -D_REENTRANT -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64 -DHAVE_CMAKE_CONFIG -D__VIDEOCORE4__ -U_FORTIFY_SOURCE -Wall -DHAVE_OMXLIB -DUSE_EXTERNAL_FFMPEG  -DHAVE_LIBAVCODEC_AVCODEC_H -DHAVE_LIBAVUTIL_OPT_H -DHAVE_LIBAVUTIL_MEM_H -DHAVE_LIBAVUTIL_AVUTIL_H -DHAVE_LIBAVFORMAT_AVFORMAT_H -DHAVE_LIBAVFILTER_AVFILTER_H -DHAVE_LIBSWRESAMPLE_SWRESAMPLE_H -DOMX -DOMX_SKIP64BIT -ftree-vectorize -DUSE_EXTERNAL_OMX -DTARGET_RASPBERRY_PI -DUSE_EXTERNAL_LIBBCM_HOST
  
@@ -17,7 +17,7 @@ index 5f4e414..a18a074 100644
  
  DIST ?= omxplayer-dist
  STRIP ?= strip
-@@ -53,7 +53,7 @@ version:
+@@ -54,7 +54,7 @@ version:
  	bash gen_version.sh > version.h 
  
  omxplayer.bin: version $(OBJS)
@@ -26,7 +26,7 @@ index 5f4e414..a18a074 100644
  	$(STRIP) omxplayer.bin
  
  help.h: README.md Makefile
-@@ -94,7 +94,7 @@ dist: omxplayer.bin omxplayer.1
+@@ -95,7 +95,7 @@ dist: omxplayer.bin omxplayer.1
  	cd $(DIST); tar -czf ../$(DIST).tgz *
  
  install:
@@ -36,14 +36,14 @@ index 5f4e414..a18a074 100644
  uninstall:
  	rm -rf /usr/bin/omxplayer
 diff --git a/Makefile.ffmpeg b/Makefile.ffmpeg
-index 0ed4419..b93930e 100644
+index f506ba2..2160d78 100644
 --- a/Makefile.ffmpeg
 +++ b/Makefile.ffmpeg
 @@ -20,11 +20,11 @@ configure:
  	CFLAGS="$(CFLAGS) ${INCLUDES}" \
  	LDFLAGS="" \
    ./configure \
--			--extra-cflags="-mfpu=vfp -mfloat-abi=hard -mno-apcs-stack-check -mstructure-size-boundary=32 -mno-sched-prolog" \
+-			--extra-cflags="-mfpu=vfp -mfloat-abi=hard" \
 +			--extra-cflags="-mfpu=neon-vfpv4 -mfloat-abi=hard -funsafe-math-optimizations -ftree-vectorize -mno-apcs-stack-check -mstructure-size-boundary=32 -mno-sched-prolog" \
  			--enable-shared \
  			--disable-static \
@@ -63,10 +63,10 @@ index 0ed4419..b93930e 100644
  			--enable-armv6 \
  			--enable-hardcoded-tables \
 diff --git a/omxplayer.cpp b/omxplayer.cpp
-index 0d4ab5e..fb238a4 100644
+index bcd9d87..7dcd565 100644
 --- a/omxplayer.cpp
 +++ b/omxplayer.cpp
-@@ -83,8 +83,8 @@ bool              m_osd                 = true;
+@@ -84,8 +84,8 @@ bool              m_osd                 = !is_model_pi4() && !is_fkms_active();
  bool              m_no_keys             = false;
  std::string       m_external_subtitles_path;
  bool              m_has_external_subtitles = false;
