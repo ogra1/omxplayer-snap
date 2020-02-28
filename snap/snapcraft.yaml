@@ -30,6 +30,7 @@ apps:
       - network-bind
       - opengl
       - home
+      - removable-media
   set-permissions:
     command: set-permissions
     daemon: oneshot
