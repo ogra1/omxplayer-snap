@@ -13,6 +13,7 @@ description: |
   
   Source for this snap: https://github.com/ogra1/omxplayer-snap
 
+base: core18
 grade: stable
 confinement: strict
 
@@ -29,6 +30,7 @@ apps:
       - network
       - network-bind
       - opengl
+      - hardware-observe
       - home
       - removable-media
   set-permissions:
@@ -56,7 +58,7 @@ parts:
     source: https://github.com/popcornmix/omxplayer.git
     source-depth: 1
     override-build: |
-      git apply ../../../omxplayer-neon-and-build.patch
+      git apply -v ../../../omxplayer-neon-and-build.patch
       make ffmpeg
       snapcraftctl build
       cp -av ../../../set-permissions $SNAPCRAFT_PART_INSTALL/usr/bin
@@ -64,7 +66,8 @@ parts:
     build-packages:
       - curl
       - libasound2-dev
-      - libva1
+      - libva2
+      - libvpx-dev
       - libpcre3-dev
       - libidn11-dev
       - libboost-dev
@@ -73,25 +76,25 @@ parts:
       - libssl-dev
       - libssh-dev
       - libsmbclient-dev
+      - libvorbis-dev
       - subversion
     stage-packages:
       - fonts-dejavu-core
       - fonts-dejavu-extra
       - libasound2
-      - libbluray1
+      - libbluray2
       - libfontconfig1
       - libgme0
       - libgomp1
       - libgsm1
-      - libicu55
+      - libicu60
       - libmodplug1
       - libmp3lame0
       - libogg0
-      - libopenjpeg5
+      - libopenjp2-7
       - libopus0
       - liborc-0.4-0
       - librtmp1
-      - libschroedinger-1.0-0
       - libshine3
       - libsnappy1v5
       - libsoxr0
@@ -99,14 +102,14 @@ parts:
       - libssh-gcrypt-4
       - libtheora0
       - libtwolame0
-      - libva1
+      - libva2
       - libvorbis0a
       - libvorbisenc2
-      - libvpx3
+      - libvpx5
       - libwavpack1
-      - libwebp5
-      - libx264-148
-      - libx265-79
+      - libwebp6
+      - libx264-152
+      - libx265-146
       - libxml2
       - libxvidcore4
       - libzvbi0
