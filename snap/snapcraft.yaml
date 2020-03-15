@@ -6,11 +6,21 @@ description: |
   It was developed as a testbed for the XBMC Raspberry PI implementation
   and is quite handy to use standalone.
 
-  OMXPlayer can not be used with the KMS driver on Ubuntu Core, make sure
-  to comment "dtoverlay=vc4-kms-v3d" in /boot/uboot/config.txt (note that
-  this in turn disables support for mir-kiosk). It is also recommended to
-  set "gpu_mem=128" (or higher) when playing 1080p60 video.
-  
+  OMXPlayer should be used with the fake KMS driver on Ubuntu Core, make
+  sure to have "dtoverlay=vc4-fkms-v3d,cma-256" in /boot/uboot/config.txt
+  (the default).
+
+  After installation please connect the hardware observe interface
+     sudo snap connect omxplayer-pi:hardware-observe
+
+  If you want to play content from the home dir on ubuntu core, also connect
+  the home interface
+     sudo snap connect omxplayer-pi:home
+
+  To play back content from a USB key or other external media, connect the
+  removable-media interface
+     sudo snap connect omxplayer-pi:removable-media
+
   Source for this snap: https://github.com/ogra1/omxplayer-snap
 
 base: core18
